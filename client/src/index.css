@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Borel&family=Playfair+Display&family=Poppins&display=swap');
+
+:root {
+  --primary-color: #18E71C;
+  --primary-hover-color: #17dd1a;
+  --secondary-color: #CDA3F5;
+  --secondary-hover-color: #c199e7;
+  --accent-color: #4BE760;
+  --text-color: #000000;
+  --bg-color: #ffffff;
+  --padding-lg: 20px;
+  --font-size-1: 48px;
+  --font-size-2: 34px;
+  --font-size-3: 24px;
+  --font-size-4: 16px;
+  --btn-width: 180px;
+  --btn-height: 50px;
+  --border-radius: 8px;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}

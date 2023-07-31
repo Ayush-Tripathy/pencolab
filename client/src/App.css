@@ -1,0 +1,42 @@
+::-moz-selection {
+    /* Code for Firefox */
+    color: #fff;
+    background: var(--accent-color);
+}
+
+::selection {
+    color: #fff;
+    background: var(--accent-color);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    width: var(--btn-width);
+    height: var(--btn-height);
+    font-size: var(--font-size-3);
+    border-radius: var(--border-radius);
+    border: none;
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover-color);
+    cursor: pointer;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    width: var(--btn-width);
+    height: var(--btn-height);
+    font-size: var(--font-size-3);
+    border-radius: var(--border-radius);
+    border: none;
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn-secondary:hover {
+    background-color: var(--secondary-hover-color);
+    cursor: pointer;
+}
