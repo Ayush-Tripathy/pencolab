@@ -8,6 +8,9 @@
   --accent-color: #4BE760;
   --text-color: #000000;
   --bg-color: #ffffff;
+  --green-color: #18E71C;
+  --pink-color: #CDA3F5;
+  --black-color: #000;
   --padding-lg: 20px;
   --font-size-1: 48px;
   --font-size-2: 34px;
@@ -16,6 +19,12 @@
   --btn-width: 180px;
   --btn-height: 50px;
   --border-radius: 8px;
+  --animation-transition-duration: 0.2s;
+}
+
+* {
+  margin: 0;
+  padding: 0;
 }
 
 body {

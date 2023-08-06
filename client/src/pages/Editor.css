@@ -1,0 +1,75 @@
+.editor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.draw-options {
+    position: absolute;
+    z-index: 100;
+    bottom: 30px;
+    /* left: 50%; */
+    display: flex;
+    gap: 20px;
+    background-color: #fff;
+    padding: 10px 20px;
+    border-radius: 50px;
+    box-shadow: 1px 1px 12px 2px #ccc;
+}
+
+.draw-options .draw-option {
+    border-radius: 50%;
+    padding: 10px;
+    transition: all var(--animation-transition-duration);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 40px;
+}
+
+.draw-options .draw-option:hover {
+    cursor: pointer;
+    background-color: #ccc !important;
+}
+
+.draw-options .material-symbols-outlined {
+    font-size: 38px;
+}
+
+
+.draw-options .draw-option input[type="radio"] {
+    /* pointer-events: auto; */
+    display: none;
+}
+
+.draw-options .draw-option.change-size {
+    box-sizing: border-box;
+    border-radius: 20px !important;
+    border: 1px solid #ccc;
+}
+
+.draw-options .draw-option .color-select {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+.draw-options .draw-option .green-color-select {
+    background-color: var(--green-color);
+}
+
+.draw-options .draw-option .pink-color-select {
+    background-color: var(--pink-color);
+}
+
+.draw-options .draw-option .black-color-select {
+    background-color: var(--black-color);
+}
+
+/* .draw-options .draw-option input[type="radio"]:checked+.material-symbols-outlined {
+    background-color: #ccc;
+} */
+
+/* .draw-options .draw-option {
+    pointer-events: none;
+} */

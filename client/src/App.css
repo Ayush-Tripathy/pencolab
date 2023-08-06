@@ -9,6 +9,15 @@
     background: var(--accent-color);
 }
 
+.no-select {
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+    /* Standard syntax */
+}
+
 .btn-primary {
     background-color: var(--primary-color);
     color: var(--text-color);
