@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import './Editor.css'
 import Canvas, { currentCanvas } from '../components/Canvas'
 import colors from '../constants/colors';
+import { RoomContext } from '../contexts/RoomContext';
+import { SocketContext } from '../contexts/SocketContext';
 
 const Editor = () => {
 
@@ -14,7 +16,7 @@ const Editor = () => {
         4: 16
     };
 
-    console.log({ canvasWidth, canvasHeight });
+    // console.log({ canvasWidth, canvasHeight });
 
     const [isErasing, setIsErasing] = useState(false);
     const [selectedColor, setSelectedColor] = useState(colors.black);
@@ -22,6 +24,13 @@ const Editor = () => {
         lineWidth: sizes[3],
         idx: 3
     });
+
+    const { connectedRoom, drawings } = useContext(RoomContext);
+    const { socket } = useContext(SocketContext);
+
+    // console.log("croom: ", socket.current)
+    // console.log("rrr: ", connectedRoom);
+    // console.log("d:", drawings.current.length);
 
     useEffect(() => {
         const options = document.querySelectorAll(".color-select");
@@ -34,13 +43,40 @@ const Editor = () => {
         });
     }, [currentSize]);
 
-
+    const drawingOptions = useRef(null);
     useEffect(() => {
         let ignore = false;
+        drawingOptions.current = document.querySelector(".draw-options");
+        const menuButton = document.getElementById('drawing-options-btn');
+        const menuIconSpan = document.getElementById('drawing-options-icon-span');
+
+        const handleClickOutside = (event) => {
+
+            if (!drawingOptions.current.contains(event.target) && event.target !== menuButton && event.target !== menuIconSpan) {
+                drawingOptions.current.style.display = 'none';
+            } else if (event.target === menuIconSpan) {
+                drawingOptions.current.style.display = 'flex';
+            }
+        };
+
+        if (window.innerWidth <= 600) {
+            console.log("yes");
+            document.addEventListener('click', handleClickOutside);
+        }
+
+        window.addEventListener("resize", () => {
+            if (window.innerWidth <= 600) {
+                document.addEventListener('click', handleClickOutside);
+            }
+            else {
+                document.removeEventListener('click', handleClickOutside);
+                drawingOptions.current.style.display = 'flex';
+            }
+        })
 
         const addEventListeners = () => {
             const drawOptionInputs = document.querySelectorAll(".draw-option-input");
-            console.log(drawOptionInputs);
+            // console.log(drawOptionInputs);
 
             const removeBgColors = () => {
                 drawOptionInputs.forEach((input) => {
@@ -71,14 +107,27 @@ const Editor = () => {
         return () => { ignore = true; }
     }, []);
 
+    const toggleMenu = (e) => {
+        // console.log(e.target);
+        if (!drawingOptions.current) return;
+        // console.log(drawingOptions.current);
+        drawingOptions.current.style.display = drawingOptions.current.style.display === 'flex' ? 'none' : 'flex';
+    };
+
+
     const clearCanvas = () => {
         const canvas = currentCanvas;
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (socket.current) {
+            socket.current.emit("clearCanvas", connectedRoom);
+            drawings.current = [];
+        }
     };
 
     const changeSize = () => {
-        console.log(currentSize);
+        // console.log(currentSize);
         setCurrentSize((prev) => {
             if (sizes.hasOwnProperty(prev.idx + 1)) {
                 return {
@@ -104,7 +153,20 @@ const Editor = () => {
                 isErasing={isErasing}
             />
 
-            <div className='draw-options no-select'>
+            <div
+                id='drawing-options-btn'
+                onClick={toggleMenu}
+                className='draw-options-menu no-select'>
+                <span
+                    id='drawing-options-icon-span'
+                    onClick={toggleMenu}
+                    className="material-symbols-rounded">
+                    menu
+                </span>
+            </div>
+            <div
+                id='drawing-options'
+                className='draw-options no-select'>
                 <label
                     onClick={() => {
                         setSelectedColor(colors.black);
@@ -156,6 +218,9 @@ const Editor = () => {
                     <span className="material-symbols-outlined">
                         close
                     </span>
+                </label>
+                <label className='draw-option'>
+                    {connectedRoom}
                 </label>
             </div>
         </div>

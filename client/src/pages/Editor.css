@@ -66,6 +66,31 @@
     background-color: var(--black-color);
 }
 
+.draw-options-menu {
+    display: none;
+    position: absolute;
+    top: 25px;
+    left: 30px;
+    border-radius: 50%;
+    box-shadow: 1px 1px 12px 2px #ccc;
+    align-items: center;
+    transition: all 0.2s;
+    padding: 5px;
+    background-color: #fff;
+}
+
+.draw-options-menu .material-symbols-rounded {
+    font-size: 38px !important;
+}
+
+.draw-options-menu:hover {
+    transform: scale(0.8);
+}
+
+.draw-options-menu:hover>.material-symbols-rounded {
+    transform: scale(0.8);
+}
+
 /* .draw-options .draw-option input[type="radio"]:checked+.material-symbols-outlined {
     background-color: #ccc;
 } */
@@ -73,3 +98,27 @@
 /* .draw-options .draw-option {
     pointer-events: none;
 } */
+
+@media screen and (max-width: 600px) {
+    .draw-options-menu {
+        display: flex;
+    }
+
+    .draw-options {
+        box-sizing: auto;
+        flex-direction: column;
+        width: 60px;
+        height: max-content;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        display: none;
+    }
+
+    .draw-options .draw-option {
+        min-height: 40px;
+        text-align: center;
+    }
+}

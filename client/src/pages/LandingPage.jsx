@@ -12,8 +12,20 @@ const LandingPage = () => {
                 </p>
 
                 <div className='btns'>
-                    <button className='btn-primary'>Create</button>
-                    <button className='btn-secondary'>Join</button>
+                    <button
+                        onClick={() => {
+                            window.location.href = "/create";
+                        }}
+                        className='btn-primary'>
+                        Create
+                    </button>
+                    <button
+                        onClick={() => {
+                            window.location.href = "/join";
+                        }}
+                        className='btn-secondary'>
+                        Join
+                    </button>
                 </div>
             </div>
             <span className='foot-ref'>

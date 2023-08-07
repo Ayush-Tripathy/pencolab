@@ -1,0 +1,14 @@
+.create-room {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    gap: 15px;
+}
+
+.create-room .btn-primary {
+    width: 140px;
+    height: 40px;
+    font-size: calc(var(--font-size-3) - 3px);
+}
