@@ -91,6 +91,14 @@
     transform: scale(0.8);
 }
 
+.draw-option.room-code {
+    border-radius: 10px;
+}
+
+.draw-option.room-code:hover {
+    cursor: copy;
+}
+
 /* .draw-options .draw-option input[type="radio"]:checked+.material-symbols-outlined {
     background-color: #ccc;
 } */

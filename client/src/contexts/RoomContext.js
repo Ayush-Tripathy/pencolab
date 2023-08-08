@@ -18,7 +18,15 @@ export const RoomProvider = ({ children }) => {
         const roomCode = window.localStorage.getItem("p_colab_rcode");
         const cName = window.localStorage.getItem("p_colab_cname");
 
-        await Axios(`http://localhost:5000/d/prev-drawings?r=${roomCode}`, {
+        let url = "";
+        if (window.location.origin === "http://localhost:3000") {
+            url = `http://localhost:5000/d/prev-drawings?r=${roomCode}`
+        }
+        else {
+            url = `http://192.168.0.108:5000/d/prev-drawings?r=${roomCode}`
+        }
+
+        await Axios(url, {
             method: "GET"
         }).then((response) => {
             if (response.data.status === "success") {

@@ -51,7 +51,6 @@ const Editor = () => {
         const menuIconSpan = document.getElementById('drawing-options-icon-span');
 
         const handleClickOutside = (event) => {
-
             if (!drawingOptions.current.contains(event.target) && event.target !== menuButton && event.target !== menuIconSpan) {
                 drawingOptions.current.style.display = 'none';
             } else if (event.target === menuIconSpan) {
@@ -60,16 +59,18 @@ const Editor = () => {
         };
 
         if (window.innerWidth <= 600) {
-            console.log("yes");
             document.addEventListener('click', handleClickOutside);
+            // document.addEventListener('touchstart', handleClickOutside);
         }
 
         window.addEventListener("resize", () => {
             if (window.innerWidth <= 600) {
                 document.addEventListener('click', handleClickOutside);
+                // document.addEventListener('touchstart', handleClickOutside);
             }
             else {
                 document.removeEventListener('click', handleClickOutside);
+                // document.removeEventListener('touchstart', handleClickOutside);
                 drawingOptions.current.style.display = 'flex';
             }
         })
@@ -91,10 +92,11 @@ const Editor = () => {
             setSelectedColor("#000");
 
             drawOptionInputs.forEach((input) => {
-                input.addEventListener("change", (e) => {
+
+                input.addEventListener("click", (e) => {
                     if (e.target.checked) {
                         const parentNode = e.target.parentNode;
-
+                        // console.log("clicked a option");
                         removeBgColors();
                         parentNode.style.backgroundColor = "#ccc";
                     }
@@ -142,6 +144,22 @@ const Editor = () => {
         });
     }
 
+    // const highlightOption = (e) => {
+    //     const drawOptionInputs = document.querySelectorAll(".draw-option-input");
+    //     // console.log(drawOptionInputs);
+
+    //     const removeBgColors = () => {
+    //         drawOptionInputs.forEach((input) => {
+    //             input.parentNode.style.backgroundColor = "#fff";
+    //         });
+    //     }
+    //     if (e.target.localName === "div" || e.target.localName === "span") {
+    //         const parentNode = e.target.parentNode;
+    //         removeBgColors();
+    //         parentNode.style.backgroundColor = "#ccc";
+    //     }
+    // }
+
 
     return (
         <div className='editor'>
@@ -155,10 +173,12 @@ const Editor = () => {
 
             <div
                 id='drawing-options-btn'
+                // onTouchStart={toggleMenu}
                 onClick={toggleMenu}
                 className='draw-options-menu no-select'>
                 <span
                     id='drawing-options-icon-span'
+                    // onTouchStart={toggleMenu}
                     onClick={toggleMenu}
                     className="material-symbols-rounded">
                     menu
@@ -172,18 +192,26 @@ const Editor = () => {
                         setSelectedColor(colors.black);
                         setIsErasing(false);
                     }}
+                    // onTouchStart={(e) => {
+                    //     setSelectedColor(colors.black);
+                    //     setIsErasing(false);
+
+                    //     // highlightOption(e);
+                    // }}
                     className='draw-option'>
                     <input className='draw-option-input' type="radio" name="draw-option" value="pen" />
                     <div className='color-select black-color-select'></div>
-                    {/* <span className="material-symbols-outlined">
-                        stylus
-                    </span> */}
                 </label>
                 <label
                     onClick={(e) => {
                         setSelectedColor(colors.green);
                         setIsErasing(false);
                     }}
+                    // onTouchStart={(e) => {
+                    //     setSelectedColor(colors.green);
+                    //     setIsErasing(false);
+                    //     // highlightOption(e);
+                    // }}
                     className='draw-option'>
                     <input className='draw-option-input' type="radio" name="draw-option" value="color" />
                     <div className='color-select green-color-select'></div>
@@ -193,12 +221,18 @@ const Editor = () => {
                         setSelectedColor(colors.pink);
                         setIsErasing(false);
                     }}
+                    // onTouchStart={(e) => {
+                    //     setSelectedColor(colors.pink);
+                    //     setIsErasing(false);
+                    //     // highlightOption(e);
+                    // }}
                     className='draw-option'>
                     <input className='draw-option-input' type="radio" name="draw-option" value="color" />
                     <div className='color-select pink-color-select'></div>
                 </label>
                 <label
                     onClick={changeSize}
+                    // onTouchStart={changeSize}
                     className='draw-option change-size'>
                     <span>Change Size</span>
                 </label>
@@ -206,6 +240,10 @@ const Editor = () => {
                     onClick={() => {
                         setIsErasing(true);
                     }}
+                    // onTouchStart={(e) => {
+                    //     setIsErasing(true);
+                    //     // highlightOption(e);
+                    // }}
                     className='draw-option'>
                     <input className='draw-option-input' type="radio" name="draw-option" value="eraser" />
                     <span className="material-symbols-outlined">
@@ -214,12 +252,13 @@ const Editor = () => {
                 </label>
                 <label
                     onClick={clearCanvas}
+                    onTouchStart={clearCanvas}
                     className='draw-option'>
                     <span className="material-symbols-outlined">
                         close
                     </span>
                 </label>
-                <label className='draw-option'>
+                <label className='draw-option room-code'>
                     {connectedRoom}
                 </label>
             </div>

@@ -1,15 +1,32 @@
 import { useEffect, useRef } from "react";
 
-// TODO: Fix touch event
-
 export default function useDraw(draw) {
     const canvasRef = useRef(null);
     const isDrawingRef = useRef(false);
     const mouseMoveListenerRef = useRef(null);
+    const touchMoveListenerRef = useRef(null);
     const mouseUpListenerRef = useRef(null);
+    const touchUpListenerRef = useRef(null);
     const prevPointRef = useRef(null);
 
+    const ongoingTouches = [];
+
+    function copyTouch({ identifier, clientX, clientY }) {
+        return { identifier, x: clientX, y: clientY };
+    }
+
+
     useEffect(() => {
+        function ongoingTouchIndexById(idToFind) {
+            for (let i = 0; i < ongoingTouches.length; i++) {
+                const id = ongoingTouches[i].identifier;
+                if (id === idToFind) {
+                    return i;
+                }
+            }
+            return -1;    // not found
+        }
+
         const getPointRelCanvas = (clientX, clientY) => {
             if (!canvasRef.current) return null;
 
@@ -24,8 +41,9 @@ export default function useDraw(draw) {
         }
 
         // Init listeners for drawing on the canvas element
-        const initMouseMoveListener = () => {
-            const mouseMoveListener = (e) => {
+        const initMoveListener = () => {
+            const moveListener = (e) => {
+                e.preventDefault();
                 let clientX, clientY;
 
                 if (e.type.startsWith("touch")) {
@@ -42,42 +60,18 @@ export default function useDraw(draw) {
                     const point = getPointRelCanvas(clientX, clientY);
 
                     if (e.type.startsWith("touch")) {
+                        prevPointRef.current = prevPointRef.current ?? point;
 
-                        // TODO: Fix touch events
-
-                        for (let i = 0; i < e.changedTouches.length; i++) {
-                            prevPointRef.current = prevPointRef.current ?? point;
-
-                            const { clientX, clientY } = e.changedTouches[i]
-                            const { x, y } = getPointRelCanvas(clientX, clientY);
-
-                            const dx = x - prevPointRef.current.x;
-                            const dy = y - prevPointRef.current.y;
-                            const distance = Math.sqrt(dx * dx + dy * dy);
-                            // window.alert(distance);
-                            if (distance > 5) {
-                                // window.alert("interpolating");
-                                const steps = Math.floor(distance / 5);
-                                const xStep = dx / steps;
-                                const yStep = dy / steps;
-
-
-                                for (let j = 0; j < steps; j++) {
-                                    const interpolatedX = prevPointRef.current.x + xStep * j;
-                                    const interpolatedY = prevPointRef.current.y + yStep * j;
-
-                                    const interpolatedPoint = {
-                                        x: interpolatedX,
-                                        y: interpolatedY
-                                    };
-
-                                    if (draw) draw(ctx, interpolatedPoint, prevPointRef.current);
-                                    prevPointRef.current = point;
+                        const touches = e.changedTouches;
+                        for (let i = 0; i < touches.length; i++) {
+                            const idx = ongoingTouchIndexById(touches[i].identifier);
+                            if (idx >= 0) {
+                                prevPointRef.current = getPointRelCanvas(ongoingTouches[idx].x, ongoingTouches[idx].y);
+                                const newPoint = getPointRelCanvas(touches[i].clientX, touches[i].clientY);
+                                if (draw) {
+                                    draw(ctx, newPoint, prevPointRef.current);
                                 }
-                            }
-                            else {
-                                if (draw) draw(ctx, point, prevPointRef.current);
-                                prevPointRef.current = point;
+                                ongoingTouches.splice(idx, 1, copyTouch(touches[i]));  // swap in the new touch record
                             }
                         }
                     }
@@ -86,41 +80,51 @@ export default function useDraw(draw) {
                         prevPointRef.current = point;
                     }
                     // prevPointRef.current = point;
-
-
-                    // console.log(point);
                 }
             }
-            mouseMoveListenerRef.current = mouseMoveListener;
-            window.addEventListener("mousemove", mouseMoveListener);
-            window.addEventListener("touchmove", mouseMoveListener);
-            // window.addEventListener("touchend", (e) => {
-            //     window.alert(e.type);
-            // })
+            mouseMoveListenerRef.current = moveListener;
+            touchMoveListenerRef.current = moveListener;
+            window.addEventListener("mousemove", moveListener);
+            window.addEventListener("touchmove", moveListener, { passive: false });
         }
 
-        const initMouseUpListener = () => {
-            const mouseUpListener = (e) => {
+        const initUpListener = () => {
+            const upListener = (e) => {
                 isDrawingRef.current = false;
                 prevPointRef.current = null;
+
+                if (e.type.startsWith("touch")) {
+                    const touches = e.changedTouches;
+                    for (let i = 0; i < touches.length; i++) {
+                        let idx = ongoingTouchIndexById(touches[i].identifier);
+                        if (idx >= 0) {
+
+                            ongoingTouches.splice(idx, 1);  // remove it; we're done
+                        }
+                    }
+                }
             }
 
-            mouseUpListenerRef.current = mouseUpListener;
-            window.addEventListener("mouseup", mouseUpListener);
-            window.addEventListener("touchend", mouseUpListener)
+            mouseUpListenerRef.current = upListener;
+            touchUpListenerRef.current = upListener;
+            window.addEventListener("mouseup", upListener);
+            window.addEventListener("touchend", upListener)
         }
 
-        initMouseUpListener();
-        initMouseMoveListener();
+        initUpListener();
+        initMoveListener();
 
         return () => {
             if (mouseMoveListenerRef.current) {
                 window.removeEventListener("mousemove", mouseMoveListenerRef.current);
+                window.removeEventListener("touchmove", touchMoveListenerRef.current)
             }
             if (mouseUpListenerRef.current) {
                 window.removeEventListener("mouseup", mouseUpListenerRef.current);
+                window.removeEventListener("touchend", touchUpListenerRef.current)
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [draw]);
 
     const setCanvasRef = (ref) => {
@@ -132,9 +136,16 @@ export default function useDraw(draw) {
         return canvasRef.current;
     }
 
-    const onMouseDown = () => {
+    const onMouseDown = (e) => {
         if (!canvasRef.current) return null;
         isDrawingRef.current = true
+
+        if (e.type.startsWith("touch")) {
+            const touches = e.changedTouches;
+            for (let i = 0; i < touches.length; i++) {
+                ongoingTouches.push(copyTouch(touches[i]));
+            }
+        }
     }
 
 

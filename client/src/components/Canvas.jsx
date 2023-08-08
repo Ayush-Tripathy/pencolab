@@ -10,8 +10,9 @@ const Canvas = ({ width, height, lineWidth, color, isErasing }) => {
 
     const { drawings, connectedRoom, checkRoom } = useContext(RoomContext);
     const { socket } = useContext(SocketContext);
-
+    console.log("canvas: ", lineWidth, color);
     const draw = (ctx, point, prevPoint) => {
+        // console.log("sending: ", point, prevPoint, lineWidth, color);
         drawLine(ctx, prevPoint, point, lineWidth, color, isErasing);
 
         if (!socket.current) return;
