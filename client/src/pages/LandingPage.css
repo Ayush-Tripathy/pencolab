@@ -49,3 +49,15 @@
     left: var(--padding-lg);
     color: var(--text-color);
 }
+
+@media screen and (max-width: 460px) {
+    .landing-page .content p {
+        font-size: calc(var(--font-size-1) - 12px);
+    }
+
+
+    .landing-page .content .btns {
+        flex-direction: column;
+        gap: 20px;
+    }
+}

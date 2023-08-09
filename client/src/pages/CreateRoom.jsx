@@ -15,7 +15,6 @@ const CreateRoom = () => {
 
     // console.log("CR render");
     useEffect(() => {
-        console.log("url: ", window.location);
         if (socket.current) {
             socket.current.on("previousDrawings", (drawings) => {
                 // console.log(drawings);

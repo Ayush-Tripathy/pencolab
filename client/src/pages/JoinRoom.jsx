@@ -1,19 +1,25 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './JoinRoom.css';
 import { SocketContext } from '../contexts/SocketContext';
 import { RoomContext } from '../contexts/RoomContext';
-import { useNavigate } from 'react-router-dom';
-
-// TODO: Add api endpoint to check if room exists
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 const JoinRoom = () => {
+
+    const { roomcode } = useParams();
+
     const [creatorName, setCreatorName] = useState("");
     const [roomCode, setRoomCode] = useState("");
     const { socket } = useContext(SocketContext);
-    const { setConnectedRoom } = useContext(RoomContext);
+    const { setConnectedRoom, drawings } = useContext(RoomContext);
     const navigate = useNavigate();
 
-    const handleJoin = () => {
+    useEffect(() => {
+        setRoomCode(roomcode);
+    }, [roomcode]);
+
+    const handleJoin = async () => {
         if (!creatorName || creatorName === "") {
             alert("Please enter a valid name!");
             return;
@@ -23,17 +29,39 @@ const JoinRoom = () => {
             return;
         }
 
-        // TODO: Add api endpoint to check if room exists
 
-        socket.current.emit('joinRoom', {
-            name: creatorName,
-            roomCode: roomCode
+        let url = "";
+        if (window.location.origin === "http://localhost:3000") {
+            url = `http://localhost:5000/join?r=${roomCode}&c=${creatorName}`
+        }
+        else {
+            url = `http://192.168.0.108:5000/join?r=${roomCode}&c=${creatorName}`
+        }
+
+        await axios.post(url).then((response) => {
+            const data = response.data;
+
+            if (data.status === "success") {
+                socket.current.emit('joinRoom', {
+                    name: creatorName,
+                    roomCode: roomCode
+                });
+
+                drawings.current = data.data.drawings;
+
+                window.localStorage.setItem("p_colab_rcode", roomCode);
+                window.localStorage.setItem("p_colab_cname", creatorName);
+                setConnectedRoom(roomCode);
+                navigate("/canvas");
+            }
+
+        }).catch(err => {
+            const data = err.response.data;
+            if (data.status === "Not found") {
+                window.alert("No room found.");
+            }
+            console.log(`Error joining room: ${err.message}`);
         });
-
-        window.localStorage.setItem("p_colab_rcode", roomCode);
-        window.localStorage.setItem("p_colab_cname", creatorName);
-        setConnectedRoom(roomCode);
-        navigate("/canvas");
     }
 
     return (

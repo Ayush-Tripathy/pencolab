@@ -83,6 +83,10 @@
     font-size: 38px !important;
 }
 
+.draw-options-menu .material-symbols-outlined {
+    font-size: 38px !important;
+}
+
 .draw-options-menu:hover {
     transform: scale(0.8);
 }
@@ -99,6 +103,8 @@
     cursor: copy;
 }
 
+
+
 /* .draw-options .draw-option input[type="radio"]:checked+.material-symbols-outlined {
     background-color: #ccc;
 } */
@@ -107,7 +113,7 @@
     pointer-events: none;
 } */
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 790px) {
     .draw-options-menu {
         display: flex;
     }

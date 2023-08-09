@@ -59,3 +59,18 @@
     border-radius: 8px;
     font-size: calc(var(--font-size-3) - 2px);
 }
+
+@media screen and (max-width: 460px) {
+    .btn-primary {
+        width: calc(var(--btn-width) - 20px);
+        height: calc(var(--btn-height) - 5px);
+        font-size: calc(var(--font-size-3) - 5px);
+    }
+
+    .btn-secondary {
+        width: calc(var(--btn-width) - 20px);
+        height: calc(var(--btn-height) - 5px);
+        font-size: calc(var(--font-size-3) - 5px);
+    }
+
+}
