@@ -20,7 +20,7 @@ function App() {
             <Route exact path='/canvas' element={<Editor />} />
             <Route exact path='/create' element={<CreateRoom />} />
             <Route exact path='/join' element={<JoinRoom />} />
-            <Route path='/:roomcode' element={<JoinRoom />} />
+            <Route path='/s/:roomcode' element={<JoinRoom />} />
           </Routes>
         </Router>
       </div>
