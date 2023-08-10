@@ -16,10 +16,10 @@ function App() {
       <div className="App">
         <Router>
           <Routes>
-            <Route exact path='/' element={<LandingPage />} />
-            <Route exact path='/canvas' element={<Editor />} />
-            <Route exact path='/create' element={<CreateRoom />} />
-            <Route exact path='/join' element={<JoinRoom />} />
+            <Route path='/' element={<LandingPage />} />
+            <Route path='/canvas' element={<Editor />} />
+            <Route path='/create' element={<CreateRoom />} />
+            <Route path='/join' element={<JoinRoom />} />
             <Route path='/s/:roomcode' element={<JoinRoom />} />
           </Routes>
         </Router>
