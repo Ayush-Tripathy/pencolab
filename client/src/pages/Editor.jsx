@@ -9,9 +9,10 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
+// import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import DrawRoundedIcon from '@mui/icons-material/DrawRounded';
 import axios from 'axios';
+import urls from '../constants/urls';
 
 const Editor = () => {
 
@@ -50,7 +51,7 @@ const Editor = () => {
     };
     const handleExtraMenuClose = (event) => {
         if (event.target.innerText === 'Copy Room Link') {
-            const roomLink = `http://localhost:3000/${connectedRoom}`;
+            const roomLink = `${urls.CLIENT_BASE_URL}/${connectedRoom}`;
             copyToClipboard(roomLink);
         }
         setAnchorEl(null);
@@ -86,12 +87,7 @@ const Editor = () => {
 
         const checkIfRoomExists = async () => {
             let url = "";
-            if (window.location.origin === "http://localhost:3000") {
-                url = `http://localhost:5000/join?r=${rc}&c=${cn}`
-            }
-            else {
-                url = `http://192.168.0.108:5000/join?r=${rc}&c=${cn}`
-            }
+            url = `${urls.API_BASE_URL}/join?r=${rc}&c=${cn}`;
 
             try {
                 await axios.post(url, { cancelToken: axiosCancelTokenSource.token }).then((response) => {

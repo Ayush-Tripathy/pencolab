@@ -13,7 +13,8 @@ const env = {
     ALLOWED_DOMAINS: (
         process.env.NODE_ENV === 'production' ?
             [
-                process.env.REMOTE_CLIENT_URL,
+                process.env.REMOTE_CLIENT_URL_1,
+                process.env.REMOTE_CLIENT_URL_2,
                 process.env.REMOTE_SERVER_URL
             ] :
             [

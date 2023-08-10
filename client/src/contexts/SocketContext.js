@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import { RoomContext } from './RoomContext';
+import urls from '../constants/urls';
 
 export const SocketContext = createContext();
 
@@ -10,12 +11,8 @@ const useSocketInstance = () => {
 
     useEffect(() => {
         let url = "";
-        if (window.location.origin === "http://localhost:3000") {
-            url = "http://localhost:5000"
-        }
-        else {
-            url = "http://192.168.0.108:5000"
-        }
+        url = `${urls.API_BASE_URL}`;
+
         const socketInstance = io.connect(url, { transports: ["websocket", "polling"] });
         // setSocket(socketInstance);
         socket.current = socketInstance;

@@ -4,6 +4,7 @@ import Axios from "axios";
 import { SocketContext } from '../contexts/SocketContext';
 import { RoomContext } from '../contexts/RoomContext';
 import { useNavigate } from 'react-router-dom';
+import urls from '../constants/urls';
 
 const CreateRoom = () => {
 
@@ -30,7 +31,7 @@ const CreateRoom = () => {
             return;
         }
 
-        await Axios("http://localhost:5000/create", {
+        await Axios(`${urls.API_BASE_URL}/create`, {
             method: "POST",
             data: {
                 creator: creatorName

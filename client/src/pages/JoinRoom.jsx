@@ -4,6 +4,7 @@ import { SocketContext } from '../contexts/SocketContext';
 import { RoomContext } from '../contexts/RoomContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import urls from '../constants/urls';
 
 const JoinRoom = () => {
 
@@ -31,12 +32,7 @@ const JoinRoom = () => {
 
 
         let url = "";
-        if (window.location.origin === "http://localhost:3000") {
-            url = `http://localhost:5000/join?r=${roomCode}&c=${creatorName}`
-        }
-        else {
-            url = `http://192.168.0.108:5000/join?r=${roomCode}&c=${creatorName}`
-        }
+        url = `${urls.API_BASE_URL}/join?r=${roomCode}&c=${creatorName}`
 
         await axios.post(url).then((response) => {
             const data = response.data;

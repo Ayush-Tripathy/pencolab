@@ -1,5 +1,6 @@
 import Axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
+import urls from "../constants/urls";
 // import { SocketContext } from "./SocketContext";
 
 export const RoomContext = React.createContext();
@@ -19,12 +20,7 @@ export const RoomProvider = ({ children }) => {
         const cName = window.localStorage.getItem("p_colab_cname");
 
         let url = "";
-        if (window.location.origin === "http://localhost:3000") {
-            url = `http://localhost:5000/d/prev-drawings?r=${roomCode}`
-        }
-        else {
-            url = `http://192.168.0.108:5000/d/prev-drawings?r=${roomCode}`
-        }
+        url = `${urls.API_BASE_URL}/d/prev-drawings?r=${roomCode}`
 
         await Axios(url, {
             method: "GET"

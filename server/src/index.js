@@ -9,19 +9,24 @@ const errorHandler = require("./middlewares/errorHandler");
 const Drawings = require("./models/Drawings");
 const drawingRouter = require("./routes/drawings");
 
-const deleteAll = async () => {
-    await Drawings.deleteMany({});
-}
-
-
 
 const app = express();
-// const server = http.createServer();
-// const io = require("socket.io")(server)
 
+const corsOptions = {
+    origin: (origin, cb) => {
+        if (!origin) {
+            cb(null, true); // send error if you don't want requests without origin.  
+        }
+        else if (env.ALLOWED_DOMAINS.indexOf(origin) !== -1) {
+            cb(null, true);
+        }
+        else {
+            cb(new Error("Not allowed by CORS."));
+        }
+    }
+}
 
-
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -29,8 +34,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/", homeRouter);
 app.use("/d", drawingRouter);
 
-app.use("*", async (req, res) => {
-    await deleteAll();
+app.use("*", (req, res) => {
     res.status(404).json({
         status: "Invalid Route",
         message: `The route "${req.url}" doesn\'t exist.`
@@ -116,26 +120,5 @@ console.log("Hello!");
         console.log(error);
     }
 })();
-
-
-const seed = async () => {
-    for (let i = 0; i <= 5; i++) {
-        let drawing = new Drawings({
-            roomCode: "fjgkn1234",
-            lastX: 1.0,
-            lastY: 2.9,
-            x: 0.5,
-            y: 0.5,
-        });
-
-        await drawing.save().then().catch(err => console.log(err));
-    }
-}
-
-// seed();
-
-// server.listen(5001);
-
-console.log("Hiiii");
 
 module.exports = connectedToDB;
