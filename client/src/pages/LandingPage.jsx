@@ -1,8 +1,10 @@
 import React from 'react'
 import "./LandingPage.css"
 import Logo from '../components/Logo'
+import { useNavigate } from 'react-router-dom'
 
 const LandingPage = () => {
+    const navigate = useNavigate();
     return (
         <div className='landing-page'>
             <Logo />
@@ -14,14 +16,14 @@ const LandingPage = () => {
                 <div className='btns'>
                     <button
                         onClick={() => {
-                            window.location.href = "/create";
+                            navigate('/create');
                         }}
                         className='btn-primary'>
                         Create
                     </button>
                     <button
                         onClick={() => {
-                            window.location.href = "/join";
+                            navigate('/join');
                         }}
                         className='btn-secondary'>
                         Join

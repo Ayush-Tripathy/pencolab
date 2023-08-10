@@ -51,7 +51,7 @@ const Editor = () => {
     };
     const handleExtraMenuClose = (event) => {
         if (event.target.innerText === 'Copy Room Link') {
-            const roomLink = `${urls.CLIENT_BASE_URL}/s/${connectedRoom}`;
+            const roomLink = `${urls.CLIENT_BASE_URL}/${connectedRoom}`;
             copyToClipboard(roomLink);
         }
         setAnchorEl(null);
