@@ -14,7 +14,7 @@ function App() {
 
     <SocketProvider roomCode={connectedRoom} creatorName={creatorName}>
       <div className="App">
-        <Router>
+        <Router basename='/'>
           <Routes>
             <Route path='/' element={<LandingPage />} />
             <Route path='/canvas' element={<Editor />} />
